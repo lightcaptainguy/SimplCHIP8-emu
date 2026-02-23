@@ -4,6 +4,7 @@
 #include <fstream>
 using namespace std;
 
+uint8_t V[16] = {0};
 void executeOpcode(uint16_t opcode, uint16_t &pc) {
     uint16_t firstNibble = (opcode & 0xF000) >> 12;
     switch(firstNibble) {
@@ -13,7 +14,13 @@ void executeOpcode(uint16_t opcode, uint16_t &pc) {
             std::cout<< "Jump to 0x" << std::hex << address << std::endl;
             break;
         }
-    
+        case 0x6: {
+            uint16_t X  = (opcode & 0x0F00) >> 8;
+            uint16_t NN = opcode & 0x00FF;
+            V[X]= NN;
+            pc += 2;
+            break;
+        }
     } 
 }
 
@@ -24,7 +31,7 @@ int main ()
     uint16_t I = {0}; // Index register I, used to point locations in memory, unused for now
     uint16_t pc = 0x200;
     
-    memory[0x200] = 0x12;
+    memory[0x200] = 0x62;
     memory[0x201] = 0x34;
     uint16_t opcode = memory[pc] << 8 | memory[pc+1];
     
