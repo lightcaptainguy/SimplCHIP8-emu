@@ -14,7 +14,8 @@ void executeOpcode(uint16_t opcode, uint16_t &pc) {
             break;
         }
     
-} 
+    } 
+}
 
 int main ()
 { 
