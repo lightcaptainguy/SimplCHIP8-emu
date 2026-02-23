@@ -6,11 +6,14 @@ using namespace std;
 
 void executeOpcode(uint16_t opcode, uint16_t &pc) {
     uint16_t firstNibble = (opcode & 0xF000) >> 12;
-    if (firstNibble == 0x1) {
-        uint16_t address = opcode & 0x0FFF;
-        pc = address;
-        std::cout<< "Jump to 0x" << std::hex << address << std::endl;
-    }
+    switch(firstNibble) {
+        case 0x1: {
+            uint16_t address = opcode & 0x0FFF;
+            pc = address;
+            std::cout<< "Jump to 0x" << std::hex << address << std::endl;
+            break;
+        }
+    
 } 
 
 int main ()
