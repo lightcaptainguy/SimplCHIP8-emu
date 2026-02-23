@@ -21,6 +21,12 @@ void executeOpcode(uint16_t opcode, uint16_t &pc) {
             pc += 2;
             break;
         }
+        case 0x7: {
+            uint16_t X = (opcode & 0x0F00) >> 8;
+            uint16_t NN = opcode & 0x00FF;
+            V[X] += NN;
+            pc += 2;
+        }
     } 
 }
 
@@ -31,7 +37,7 @@ int main ()
     uint16_t I = {0}; // Index register I, used to point locations in memory, unused for now
     uint16_t pc = 0x200;
     
-    memory[0x200] = 0x62;
+    memory[0x200] = 0x72;
     memory[0x201] = 0x34;
     uint16_t opcode = memory[pc] << 8 | memory[pc+1];
     
@@ -41,9 +47,7 @@ int main ()
 
     executeOpcode(opcode, pc);
     std::cout<<"PC after execute: 0x" << std::hex << pc << std::endl;
-
-
-
+    
 }
 
 
