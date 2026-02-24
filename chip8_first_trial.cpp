@@ -5,6 +5,7 @@
 using namespace std;
 
 uint8_t V[16] = {0};
+uint16_t I = {0};
 void executeOpcode(uint16_t opcode, uint16_t &pc) {
     uint16_t firstNibble = (opcode & 0xF000) >> 12;
     switch(firstNibble) {
@@ -19,6 +20,7 @@ void executeOpcode(uint16_t opcode, uint16_t &pc) {
             uint16_t NN = opcode & 0x00FF;
             V[X]= NN;
             pc += 2;
+            std::cout<< "Set V["<<X<<"] to "  << std::hex << NN << std::endl;
             break;
         }
         case 0x7: {
@@ -27,6 +29,13 @@ void executeOpcode(uint16_t opcode, uint16_t &pc) {
             V[X] += NN;
             pc += 2;
         }
+        case 0xA: {
+            uint16_t NNN = (opcode & 0x0FFF);
+            I = NNN;
+            pc += 2;
+            std::cout<< "Set Index Register to " << std::hex << NNN << std::endl;
+            break;
+         }
     } 
 }
 
@@ -37,7 +46,7 @@ int main ()
     uint16_t I = {0}; // Index register I, used to point locations in memory, unused for now
     uint16_t pc = 0x200;
     
-    memory[0x200] = 0x72;
+    memory[0x200] = 0xA2;
     memory[0x201] = 0x34;
     uint16_t opcode = memory[pc] << 8 | memory[pc+1];
     
