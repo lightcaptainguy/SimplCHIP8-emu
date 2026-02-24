@@ -29,6 +29,46 @@ void executeOpcode(uint16_t opcode, uint16_t &pc) {
             V[X] += NN;
             pc += 2;
         }
+        case 0x8: {
+            uint16_t X = (opcode & 0x0F00) >> 8;
+            uint16_t Y = (opcode & 0x00F0) >> 4;
+            uint16_t Subtype = (opcode & 0x000F);
+            switch (Subtype) {
+                case 0x0: {
+                   V[X]=V[Y];
+                   pc +=2;
+            std::cout<< "Set V["<<X<<"] to V["<<Y<<"] " << std::endl;
+            break; 
+                }
+                case 0x1: {
+                    V[X] |= V[Y];
+                    V[0xF] = 0;
+                    pc += 2;
+                    break;
+                }
+                case 0x2: {
+                    V[X] &= V[Y];
+                    pc += 2;
+                    break;
+                }
+                case 0x3: {
+                    V[X] ^= V[Y];
+                    pc += 2;
+                    break;
+                }
+                case 0x4: {
+                    uint16_t sum = V[X] + V[Y];
+                    if (sum >255)
+                    V[0xF] = 1;
+                    else
+                    V[0xF] = 0;
+                V[X] = sum & 0xFF;
+                pc +=2;
+                break;
+                }
+                
+            }
+        }
         case 0xA: {
             uint16_t NNN = (opcode & 0x0FFF);
             I = NNN;
@@ -46,8 +86,8 @@ int main ()
     uint16_t I = {0}; // Index register I, used to point locations in memory, unused for now
     uint16_t pc = 0x200;
     
-    memory[0x200] = 0xA2;
-    memory[0x201] = 0x34;
+    memory[0x200] = 0x82;
+    memory[0x201] = 0x30;
     uint16_t opcode = memory[pc] << 8 | memory[pc+1];
     
     std::cout<<"CHIP-8 Initialized\n";
