@@ -71,6 +71,18 @@ void executeOpcode(uint16_t opcode, uint16_t &pc) {
                     V[0xF] = 1;
                     else
                      V[0xF] = 0;
+                     V[X] -= V[Y];
+                     pc += 2;
+                     break;
+                }
+                case 0x6: {
+                    V[0xF] = V[X] & 0x1;
+                    V[X] >>= 1;
+                    pc +=2;
+                    break;
+                }
+                case 0x7: {
+                    
                 }
             }
         }
