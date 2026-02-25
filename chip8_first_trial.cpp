@@ -66,7 +66,12 @@ void executeOpcode(uint16_t opcode, uint16_t &pc) {
                 pc +=2;
                 break;
                 }
-                
+                case 0x5: {
+                    if (V[X]>=V[Y])
+                    V[0xF] = 1;
+                    else
+                     V[0xF] = 0;
+                }
             }
         }
         case 0xA: {
