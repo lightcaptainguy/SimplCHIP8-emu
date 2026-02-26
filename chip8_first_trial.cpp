@@ -91,7 +91,10 @@ void executeOpcode(uint16_t opcode, uint16_t &pc) {
                     break;
                 }
                 case 0xE: {
-                    
+                    V[0xF] = (V[X] & 0x80) >> 7;
+                    V[X] <<=1;
+                    pc += 2;
+                    break;
                 }
             }
         }
