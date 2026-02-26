@@ -1,12 +1,36 @@
+#include "chip8.h"
 #include <iostream>
 #include <cstring>
 #include <cstdint>
 #include <fstream>
 using namespace std;
 
-uint8_t V[16] = {0};
-uint16_t I = {0};
-void executeOpcode(uint16_t opcode, uint16_t &pc) {
+chip8::chip8() {
+    Initialize();
+}
+
+void chip8::initialize() {
+    pc = 0x200;
+    I  = 0;
+    SP = 0;
+    drawFlag = false;
+
+    memset(memory, sizeof(memory));
+    memset(V, 0, sizeof(V));
+    memset(display, 0, sizeof(display));
+    memset(stack 0, sizeof(stack));
+    memset(keys, 0, sizeof(keys));
+
+    delay_timer = 0;
+    sound_timer = 0;
+
+}
+
+void chip8::loadROM(const char* filename) {
+    
+}
+
+void chip8::executeOpcode(uint16_t opcode) {
     uint16_t firstNibble = (opcode & 0xF000) >> 12;
     switch(firstNibble) {
         case 0x1: {
@@ -108,25 +132,6 @@ void executeOpcode(uint16_t opcode, uint16_t &pc) {
     } 
 }
 
-int main ()
-{ 
-    uint8_t memory[4096] = {0}; // RAM
-    uint8_t V[16] = {0}; // 16 8 bit memory registers Vx, where x varies from 0 to F, unused for now
-    uint16_t I = {0}; // Index register I, used to point locations in memory, unused for now
-    uint16_t pc = 0x200;
-    
-    memory[0x200] = 0x82;
-    memory[0x201] = 0x30;
-    uint16_t opcode = memory[pc] << 8 | memory[pc+1];
-    
-    std::cout<<"CHIP-8 Initialized\n";
-    std::cout<<"PC: 0x" <<std::hex << pc << std::endl;
-    std::cout<<"Opcode at PC: 0x" <<std::hex << opcode << std::endl;
-
-    executeOpcode(opcode, pc);
-    std::cout<<"PC after execute: 0x" << std::hex << pc << std::endl;
-    
-}
 
 
 
