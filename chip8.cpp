@@ -76,6 +76,7 @@ void chip8::executeOpcode(uint16_t opcode) {
             uint16_t NN = opcode & 0x00FF;
             V[X] += NN;
             pc += 2;
+            std::cout << "Add " << (int)NN << " to V[" << (int)X << "]" << std::endl;
         }
         case 0x8: {
             uint16_t X = (opcode & 0x0F00) >> 8;
@@ -144,6 +145,9 @@ void chip8::executeOpcode(uint16_t opcode) {
                     pc += 2;
                     break;
                 }
+                default:
+                    std::cout << "Unknown 8XY subtype: 0x" << std::hex << (int)subtype << std::endl;
+                    break;
             }
         }
         case 0xA: {
@@ -153,6 +157,8 @@ void chip8::executeOpcode(uint16_t opcode) {
             std::cout<< "Set Index Register to " << std::hex << NNN << std::endl;
             break;
          }
+         default:
+           std::cout << " Unknown Opcode: 0x" << std::hex << opcode << std::endl;
     } 
 }
 
