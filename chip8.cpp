@@ -27,8 +27,25 @@ void chip8::initialize() {
 }
 
 void chip8::loadROM(const char* filename) {
-    
+    std::ifstream file(filename std::ios::binary | std::ios:ate);
+    if (!file.is_open()) {
+        std::cerr << "Failed to open ROM" << filename << std::endl;
+        return;
+    }
+
+std::streampos size = file.tellg();
+char* buffer = new char[size];
+file.seekg(0, std::ios::beg);
+file.read(buffer, size);
+file.close();
+
+for (int i=0, i < size, i++) {
+    memory[0x200 + i] = buffer[i];
 }
+delete[] buffer;
+std::cout << "Loaded ROM" << size << "bytes" << std::endl;
+}
+
 
 void chip8::executeOpcode(uint16_t opcode) {
     uint16_t firstNibble = (opcode & 0xF000) >> 12;
