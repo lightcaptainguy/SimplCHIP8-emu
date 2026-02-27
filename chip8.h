@@ -7,7 +7,7 @@ class chip8 {
     chip8();
     void emulateCycle();
     void loadROM(const char* filename);
-    void loadTestProgram()
+    void loadTestProgram();
     uint8_t display[64 * 32];
     uint8_t keys[16];
     bool drawFlag;

@@ -9,16 +9,16 @@ chip8::chip8() {
     Initialize();
 }
 
-void chip8::initialize() {
+void chip8::Initialize() {
     pc = 0x200;
     I  = 0;
     SP = 0;
     drawFlag = false;
 
-    memset(memory, sizeof(memory));
+    memset(memory, 0, sizeof(memory));
     memset(V, 0, sizeof(V));
     memset(display, 0, sizeof(display));
-    memset(stack 0, sizeof(stack));
+    memset(stack, 0, sizeof(stack));
     memset(keys, 0, sizeof(keys));
 
     delay_timer = 0;
@@ -27,7 +27,7 @@ void chip8::initialize() {
 }
 
 void chip8::loadROM(const char* filename) {
-    std::ifstream file(filename std::ios::binary | std::ios:ate);
+    std::ifstream file(filename, std::ios::binary | std::ios::ate);
     if (!file.is_open()) {
         std::cerr << "Failed to open ROM" << filename << std::endl;
         return;
@@ -52,6 +52,7 @@ void chip8::emulateCycle() {
 
     if ( delay_timer > 0 ) delay_timer--;
     if ( sound_timer >0 ) sound_timer--;
+    pc += 2;
 }
 
 void chip8::executeOpcode(uint16_t opcode) {
@@ -67,7 +68,6 @@ void chip8::executeOpcode(uint16_t opcode) {
             uint16_t X  = (opcode & 0x0F00) >> 8;
             uint16_t NN = opcode & 0x00FF;
             V[X]= NN;
-            pc += 2;
             std::cout<< "Set V["<<X<<"] to "  << std::hex << NN << std::endl;
             break;
         }
@@ -75,7 +75,7 @@ void chip8::executeOpcode(uint16_t opcode) {
             uint16_t X = (opcode & 0x0F00) >> 8;
             uint16_t NN = opcode & 0x00FF;
             V[X] += NN;
-            pc += 2;
+            ;
             std::cout << "Add " << (int)NN << " to V[" << (int)X << "]" << std::endl;
         }
         case 0x8: {
@@ -85,24 +85,24 @@ void chip8::executeOpcode(uint16_t opcode) {
             switch (Subtype) {
                 case 0x0: {
                    V[X]=V[Y];
-                   pc +=2;
+                   
             std::cout<< "Set V["<<X<<"] to V["<<Y<<"] " << std::endl;
             break; 
                 }
                 case 0x1: {
                     V[X] |= V[Y];
                     V[0xF] = 0;
-                    pc += 2;
+                    ;
                     break;
                 }
                 case 0x2: {
                     V[X] &= V[Y];
-                    pc += 2;
+                    ;
                     break;
                 }
                 case 0x3: {
                     V[X] ^= V[Y];
-                    pc += 2;
+                    ;
                     break;
                 }
                 case 0x4: {
@@ -112,7 +112,7 @@ void chip8::executeOpcode(uint16_t opcode) {
                     else
                     V[0xF] = 0;
                 V[X] = sum & 0xFF;
-                pc +=2;
+                
                 break;
                 }
                 case 0x5: {
@@ -121,13 +121,13 @@ void chip8::executeOpcode(uint16_t opcode) {
                     else
                      V[0xF] = 0;
                      V[X] -= V[Y];
-                     pc += 2;
+                     ;
                      break;
                 }
                 case 0x6: {
                     V[0xF] = V[X] & 0x1;
                     V[X] >>= 1;
-                    pc +=2;
+                    
                     break;
                 }
                 case 0x7: {
@@ -136,13 +136,13 @@ void chip8::executeOpcode(uint16_t opcode) {
                     else
                     V[0xF] = 0;
                     V[X] = V[Y] - V[X];
-                    pc += 2;
+                    ;
                     break;
                 }
                 case 0xE: {
                     V[0xF] = (V[X] & 0x80) >> 7;
                     V[X] <<=1;
-                    pc += 2;
+                    ;
                     break;
                 }
                 default:
@@ -153,7 +153,7 @@ void chip8::executeOpcode(uint16_t opcode) {
         case 0xA: {
             uint16_t NNN = (opcode & 0x0FFF);
             I = NNN;
-            pc += 2;
+            ;
             std::cout<< "Set Index Register to " << std::hex << NNN << std::endl;
             break;
          }
@@ -162,14 +162,14 @@ void chip8::executeOpcode(uint16_t opcode) {
     } 
 }
 void chip8::loadTestProgram() {
-    chip8.memory[0x200] = 0x60; // 0x60 0A  →  LD V0, 0x0A
-     chip8.memory[0x201] = 0x0A;
+    memory[0x200] = 0x60; // 0x60 0A  →  LD V0, 0x0A
+    memory[0x201] = 0x0A;
 
-     chip8.memory[0x202] = 0x70; // 0x70 05  →  ADD V0, 0x05
-     chip8.memory[0x203] = 0x05;
+    memory[0x202] = 0x70; // 0x70 05  →  ADD V0, 0x05
+    memory[0x203] = 0x05;
 
-     chip8.memory[0x204] = 0x12; // 0x12 00  →  JP 0x200 (loop)
-     chip8.memory[0x205] = 0x00;
+    memory[0x204] = 0x12; // 0x12 00  →  JP 0x200 (loop)
+    memory[0x205] = 0x00;
      pc = 0x200;
 }
 
