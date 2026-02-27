@@ -46,6 +46,13 @@ delete[] buffer;
 std::cout << "Loaded ROM" << size << "bytes" << std::endl;
 }
 
+void chip8::emulateCycle() {
+    uint16_t opcode = memory[pc] << 8 | memory[pc + 1];
+    executeOpcode(opcode);
+
+    if ( delay_timer > 0 ) delay_timer--;
+    if ( sound_timer >0 ) sound_timer--;
+}
 
 void chip8::executeOpcode(uint16_t opcode) {
     uint16_t firstNibble = (opcode & 0xF000) >> 12;
