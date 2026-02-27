@@ -39,7 +39,7 @@ file.seekg(0, std::ios::beg);
 file.read(buffer, size);
 file.close();
 
-for (int i=0, i < size, i++) {
+for (int i=0; i < size; i++) {
     memory[0x200 + i] = buffer[i];
 }
 delete[] buffer;
@@ -146,7 +146,7 @@ void chip8::executeOpcode(uint16_t opcode) {
                     break;
                 }
                 default:
-                    std::cout << "Unknown 8XY subtype: 0x" << std::hex << (int)subtype << std::endl;
+                    std::cout << "Unknown 8XY subtype: 0x" << std::hex << (int)Subtype << std::endl;
                     break;
             }
         }
@@ -160,6 +160,17 @@ void chip8::executeOpcode(uint16_t opcode) {
          default:
            std::cout << " Unknown Opcode: 0x" << std::hex << opcode << std::endl;
     } 
+}
+void chip8::loadTestProgram() {
+    chip8.memory[0x200] = 0x60; // 0x60 0A  →  LD V0, 0x0A
+     chip8.memory[0x201] = 0x0A;
+
+     chip8.memory[0x202] = 0x70; // 0x70 05  →  ADD V0, 0x05
+     chip8.memory[0x203] = 0x05;
+
+     chip8.memory[0x204] = 0x12; // 0x12 00  →  JP 0x200 (loop)
+     chip8.memory[0x205] = 0x00;
+     pc = 0x200;
 }
 
 

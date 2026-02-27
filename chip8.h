@@ -6,7 +6,8 @@ class chip8 {
     public:
     chip8();
     void emulateCycle();
-    void loadROM(filename const char* filename);
+    void loadROM(const char* filename);
+    void loadTestProgram()
     uint8_t display[64 * 32];
     uint8_t keys[16];
     bool drawFlag;
@@ -20,9 +21,10 @@ class chip8 {
     uint8_t stack[16]; //16 16bit values can be stored in the stack
     uint8_t delay_timer, sound_timer; // delay and sound 8 bit registers
 
-    void Initialize()
-    void executeOpcode(uint16_t opcode)
+    void Initialize();
+    void executeOpcode(uint16_t opcode);
 
 
 
-}
+};
+#endif
